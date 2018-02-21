@@ -1,0 +1,8 @@
+applications:
+- path: .
+  memory: 1024M
+  instances: 1
+  domain: mybluemix.net
+  name: employee-chart
+  host: employee-chart
+  disk_quota: 2048M

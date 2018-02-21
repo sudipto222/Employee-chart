@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 100%;
+}
+form {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+path:hover{
+    opacity:0.6;
+    cursor:pointer;
+    pointer-events:all
+}
+path {
+  stroke: #fff;
+  fill-rule: evenodd;
+}
+svg{
+    padding:30px 80px;
+    overflow:visible;
+}
+text {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+}
+
+.btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.btn-defualt {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+</style>
+
+<script>
+
+var chartFilePath = '';
+
+<%if (chartDataPath.length > 0) { %>
+	chartFilePath = '<%= chartDataPath%>';
+	chartFilePath = chartFilePath.replace('/public','');
+	console.log("file path",chartFilePath);
+
+<% } else{ %>
+	chartFilePath = '/default/flare.json';
+//	chartFilePath = '/chart-data/1500810526307-file.json';
+    console.log("file path",chartFilePath);
+<% } %>
+
+function checkForm(forms){
+	var fileObject = document.getElementById("employeedata").value;
+	
+	if (fileObject == ''){
+		
+		bootbox.alert({ 
+		  size: "large",
+		  title: "Alert! employeedata not selected.",
+		  message: "Please select a valid employeedata file.", 
+		  callback: function(){ /* your callback code */ }
+		});
+		
+	}else{
+		var _isValideChaicodeFormat = validateFileFormat(fileObject);
+		
+		if(!_isValideChaicodeFormat){
+			bootbox.alert({ 
+			  size: "large",
+			  title: "Alert! Invalid employeedata.",
+			  message: "Please select a valid employeedata file.", 
+			  callback: function(){ /* your callback code */ }
+			});
+		}else{
+			document.forms["uploadForm"].submit();
+			return true;
+		}
+	}
+	return false;x
+}
+
+function validateFileFormat(fileObject){
+	var _validFileExtensions = [".json"];
+	var blnValid = false;
+	
+	for (var j = 0; j < _validFileExtensions.length; j++) {
+		var sCurExtension = _validFileExtensions[j];
+		
+		if (fileObject.substr(fileObject.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+            blnValid = true;
+            break;
+        }
+	}
+	return blnValid;
+}
+</script>
+
+
+<script type="text/javascript" src="/script/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/script/d3.js"></script>
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+
+        <form id  =  "uploadForm"
+              enctype   =  "multipart/form-data"
+              action    =  "upload"
+              method    =  "post">
+            <!--<label for="file"> Upload emp detail xls</label>
+            <input type="file" name="file" />-->
+            <span class="btn btn-default btn-file">
+                <span>Choose file</span>
+                <input type="file" name="file" /></span>
+                <span class="fileinput-filename"></span>
+            <input type="submit" value="Upload" name="submit" onclick="location.reload()">
+        </form>
+		
+		<div class="pull-left">
+			<script type="text/javascript" src="/script/chart.js"></script>
+		</div>
+
+    </div>
+</div>
+
+</body>
+</html>
